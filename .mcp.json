@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "gcs-storage-agent": {
+      "command": "C:/Users/ngoga/Documents/After-graduation/Multi-Cloud-ai/gcp-storage-pilot/venv/Scripts/python.exe",
+      "args": ["bucket_storage_agent/mcp_server.py"],
+      "cwd": "C:/Users/ngoga/Documents/After-graduation/Multi-Cloud-ai/gcp-storage-pilot",
+      "env": {
+        "AGENT_API_URL": "http://localhost:8080"
+      }
+    }
+  }
+}

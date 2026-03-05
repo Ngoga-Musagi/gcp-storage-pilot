@@ -1,0 +1,14 @@
+# Google Cloud Storage Agent Configuration
+# Copy this content to a new file named .env in the bucket_storage_agent directory
+
+# Required: Your Google Cloud Project ID
+GOOGLE_CLOUD_PROJECT=your-project-id-here
+
+# Required: Path to your service account key file
+GOOGLE_APPLICATION_CREDENTIALS=./service-account-key.json
+
+# Optional: Default settings
+DEFAULT_BUCKET=my-default-bucket
+DEFAULT_REGION=US
+DEFAULT_STORAGE_CLASS=STANDARD
+

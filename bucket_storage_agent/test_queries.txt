@@ -1,0 +1,211 @@
+# GCP Storage Agent - Comprehensive Test Queries
+# Test all 57 functionalities across 7 categories
+
+## 🏗️ 1. BUCKET MANAGEMENT TESTS
+
+### Basic Bucket Operations
+"Create a new storage bucket named 'test-bucket-001' in the US region with STANDARD storage class"
+"Create a bucket called 'my-website-assets' in the EU region with NEARLINE storage class and enable versioning"
+"List all storage buckets in my project"
+"Delete the bucket 'test-bucket-001' but keep the objects inside"
+"Delete the bucket 'old-backup-bucket' and all its contents"
+
+### Bucket Configuration & Details
+"Get detailed information about the bucket 'my-website-assets' including location, storage class, and labels"
+"Update the storage class of 'my-website-assets' bucket to COLDLINE"
+"Enable versioning for the bucket 'important-data-bucket'"
+"Disable versioning for the bucket 'temporary-files-bucket'"
+"Show me the usage statistics for 'my-website-assets' bucket including size and object count"
+
+### Bucket Policies & IAM
+"Get the current bucket policy for 'my-website-assets'"
+"Set the bucket policy for 'my-website-assets' to prevent public access"
+"Lock the bucket policy for 'important-data-bucket' with a 5-year retention period"
+"Show me the IAM policy for 'my-website-assets' bucket"
+"Set IAM policy for 'my-website-assets' to allow public read access"
+"Add a label 'environment=production' to the bucket 'my-website-assets'"
+"Remove the label 'environment=test' from the bucket 'test-bucket-001'"
+"Set up lifecycle rules for 'my-website-assets' to automatically delete objects older than 30 days"
+
+## 📁 2. OBJECT (FILE) MANAGEMENT TESTS
+
+### Basic Object Operations
+"Upload the file 'document.pdf' from my local machine to the bucket 'my-website-assets'"
+"Download the file 'document.pdf' from 'my-website-assets' bucket to my local Downloads folder"
+"Delete the file 'old-document.pdf' from 'my-website-assets' bucket"
+"Rename the file 'document.pdf' to 'important-document.pdf' in 'my-website-assets' bucket"
+"Copy the file 'document.pdf' from 'my-website-assets' to 'backup-bucket'"
+"List all objects in 'my-website-assets' bucket"
+"List all objects in 'my-website-assets' bucket that start with 'doc'"
+"Show me detailed metadata for the file 'document.pdf' in 'my-website-assets' bucket"
+
+### Object Metadata & Access
+"Update the metadata for 'document.pdf' to include content-type as 'application/pdf' and author as 'John Doe'"
+"Set ACL permissions for 'document.pdf' to allow public read access"
+"Get the ACL permissions for 'document.pdf' in 'my-website-assets' bucket"
+"Generate a signed URL for 'document.pdf' that expires in 2 hours"
+"Generate a signed URL for uploading a new file 'report.pdf' that expires in 1 hour"
+
+### Object Versioning
+"Restore the previous version of 'document.pdf' in 'my-website-assets' bucket"
+"Show me all versions of 'document.pdf' in 'my-website-assets' bucket"
+
+## 🔒 3. ACCESS & SECURITY TESTS
+
+### Bucket Permissions
+"Add user 'john.doe@company.com' as a Storage Object Viewer to 'my-website-assets' bucket"
+"Add service account 'backup-service@project.iam.gserviceaccount.com' as Storage Admin to 'my-website-assets' bucket"
+"Remove user 'old.user@company.com' from 'my-website-assets' bucket permissions"
+"List all users and service accounts that have access to 'my-website-assets' bucket"
+"Enable public access for 'my-website-assets' bucket"
+"Disable public access for 'my-website-assets' bucket"
+
+### Security Auditing
+"Audit the access patterns for 'my-website-assets' bucket over the last 7 days"
+"Set uniform bucket-level access for 'my-website-assets' bucket to enabled"
+
+## ⚙️ 4. MONITORING & OPTIMIZATION TESTS
+
+### Metrics & Analytics
+"Show me the metrics for 'my-website-assets' bucket over the last 7 days"
+"Analyze the cost estimate for 'my-website-assets' bucket for the next month"
+"Monitor access logs for 'my-website-assets' bucket for the last 24 hours"
+"Enable request logging for 'my-website-assets' bucket"
+"Disable request logging for 'my-website-assets' bucket"
+"Analyze the activity patterns for 'my-website-assets' bucket over the last 30 days"
+
+## 🌐 5. WEBSITE HOSTING TESTS
+
+### Website Configuration
+"Enable static website hosting for 'my-website-assets' bucket with index.html as the main page"
+"Disable website hosting for 'my-website-assets' bucket"
+"Set the main page for 'my-website-assets' website to 'home.html'"
+"Set the error page for 'my-website-assets' website to '404.html'"
+"Upload all files from my local 'website' folder to 'my-website-assets' bucket"
+"Set CORS configuration for 'my-website-assets' bucket to allow requests from 'https://mydomain.com'"
+"Set cache control for 'style.css' in 'my-website-assets' bucket to cache for 1 hour"
+
+## 🔄 6. ADVANCED OPERATIONS TESTS
+
+### Data Management
+"Sync my local 'website' directory to 'my-website-assets' bucket"
+"Backup all contents from 'my-website-assets' bucket to 'backup-bucket'"
+"Migrate 'my-website-assets' bucket from US region to EU region"
+"Archive objects older than 365 days in 'my-website-assets' bucket to COLDLINE storage"
+"Schedule periodic cleanup for 'my-website-assets' bucket to delete objects older than 90 days"
+
+### Integration & Automation
+"Set up a Cloud Function trigger for 'my-website-assets' bucket to run 'process-upload' function when new files are uploaded"
+"Connect 'my-website-assets' bucket to BigQuery dataset 'storage_analytics'"
+
+## 🧠 7. AGENT INTELLIGENCE TESTS
+
+### Analysis & Recommendations
+"Summarize the current status of 'my-website-assets' bucket including usage, costs, and configuration"
+"Analyze 'my-website-assets' bucket and recommend the most cost-effective storage class for my files"
+"Review the security settings for 'my-website-assets' bucket and suggest improvements"
+"Analyze the access patterns for 'my-website-assets' bucket and recommend optimization strategies"
+
+## 🔄 COMPLEX WORKFLOW TESTS
+
+### Multi-Step Operations
+"Create a new bucket for my photography website, enable hosting, upload my images, and set up CORS for my domain"
+"Set up a backup system: create a backup bucket, copy all files from my main bucket, and schedule weekly backups"
+"Optimize my storage costs: analyze current usage, recommend storage classes, and set up lifecycle rules"
+"Secure my bucket: audit current permissions, remove unnecessary access, and set up proper IAM policies"
+"Set up a complete website: create bucket, enable hosting, upload assets, configure CORS, and set cache control"
+
+### Error Handling Tests
+"Try to create a bucket with an invalid name"
+"Attempt to upload a file to a non-existent bucket"
+"Try to access a file that doesn't exist"
+"Attempt to delete a bucket that doesn't exist"
+
+### Edge Cases
+"Create a bucket with special characters in the name"
+"Upload a very large file (simulate with a 1GB file)"
+"Handle a bucket with thousands of objects"
+"Work with a bucket that has versioning enabled and multiple versions of files"
+
+## 📊 PERFORMANCE & SCALE TESTS
+
+### Large Scale Operations
+"List all objects in a bucket with 10,000+ files"
+"Copy 1000 files from one bucket to another"
+"Analyze metrics for a bucket with high traffic"
+"Generate signed URLs for 100 different files"
+
+## 🛡️ SECURITY & COMPLIANCE TESTS
+
+### Security Auditing
+"Audit all bucket access for the last 30 days and identify any suspicious activity"
+"Review all IAM policies and identify overly permissive access"
+"Check for any publicly accessible buckets that shouldn't be public"
+"Analyze object-level permissions and identify security risks"
+
+### Compliance & Governance
+"Ensure all buckets have proper lifecycle rules for data retention"
+"Verify that sensitive data is stored in appropriate storage classes"
+"Check that all buckets have proper labeling for compliance tracking"
+"Audit backup and disaster recovery configurations"
+
+## 💡 INTELLIGENT REASONING TESTS
+
+### Natural Language Understanding
+"I want to host my portfolio website on Google Cloud Storage"
+"I need to backup my important documents to the cloud"
+"My storage costs are too high, help me optimize them"
+"I want to share files with my team but keep them secure"
+"I need to migrate my data from one region to another"
+
+### Problem Solving
+"My website is loading slowly, what can I do?"
+"I'm getting access denied errors, help me fix them"
+"My storage costs increased suddenly, what happened?"
+"I need to comply with data retention policies, how do I set this up?"
+"I want to automate my backup process, what are my options?"
+
+## 🎯 USAGE SCENARIOS
+
+### Developer Workflow
+"Set up a development environment bucket with proper permissions for my team"
+"Deploy my static website to Google Cloud Storage"
+"Set up automated backups for my application data"
+"Configure monitoring and alerting for my storage usage"
+
+### Business Operations
+"Set up a document management system with proper access controls"
+"Create a media storage solution for my company's assets"
+"Implement a data archival strategy for compliance"
+"Set up cost monitoring and optimization for our storage"
+
+### Disaster Recovery
+"Create a disaster recovery plan for my critical data"
+"Set up cross-region replication for my important buckets"
+"Implement automated backup verification"
+"Create a data recovery procedure for accidental deletions"
+
+---
+
+# Test Execution Notes
+
+## Prerequisites
+- Ensure GOOGLE_CLOUD_PROJECT environment variable is set
+- Ensure GOOGLE_APPLICATION_CREDENTIALS points to valid service account key
+- Have test files ready for upload operations
+- Ensure sufficient permissions for all operations
+
+## Test Categories
+1. **Basic Functionality**: Test core operations work correctly
+2. **Error Handling**: Test graceful handling of invalid inputs
+3. **Security**: Test access controls and permissions
+4. **Performance**: Test with large datasets
+5. **Integration**: Test complex multi-step workflows
+6. **Intelligence**: Test natural language understanding and reasoning
+
+## Expected Outcomes
+- All operations should complete successfully or provide clear error messages
+- Agent should provide helpful explanations for complex operations
+- Security operations should maintain proper access controls
+- Cost optimization suggestions should be practical and actionable
+- Natural language queries should be understood and executed correctly
