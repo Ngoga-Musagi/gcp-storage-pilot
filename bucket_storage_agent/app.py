@@ -326,56 +326,65 @@ async def deploy_website(request: DeployRequest):
     """
     Programmatic website deployment endpoint.
 
-    Accepts structured file content and drives the agent to upload each file
-    to the specified GCS bucket using the upload_html_content tool.
+    Uploads HTML/CSS/JS file content directly to GCS via the storage SDK —
+    no local file path required, no agent routing needed.
 
     Callable by external coding agents (e.g. Claude Code, Cursor) via:
         POST /api/deploy
         { "bucket_name": "my-bucket", "files": [{"filename": "index.html", "content": "..."}] }
     """
-    session_id = request.session_id or str(uuid.uuid4())
-    user_id = request.user_id or "deploy_user"
+    import io
+    try:
+        from google.cloud import storage as gcs
+        from google.auth import default as gcp_default
 
-    await _ensure_session(session_id, user_id)
+        project_id = os.getenv("GOOGLE_CLOUD_PROJECT")
+        creds_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 
-    responses: list[str] = []
+        if not project_id:
+            return JSONResponse({"status": "error", "message": "GOOGLE_CLOUD_PROJECT not set"}, status_code=500)
+        if not creds_path or not Path(creds_path).exists():
+            return JSONResponse({"status": "error", "message": "GCP credentials not found"}, status_code=500)
 
-    for deploy_file in request.files:
-        message = (
-            f"Upload the following as {deploy_file.filename} "
-            f"to bucket '{request.bucket_name}':\n"
-            f"```html\n{deploy_file.content}\n```"
-        )
-        try:
-            response = await asyncio.wait_for(
-                _run_agent_async(session_id, user_id, message),
-                timeout=120.0,
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = creds_path
+        credentials, auth_project = gcp_default()
+        if auth_project:
+            project_id = auth_project
+
+        client = gcs.Client(project=project_id, credentials=credentials)
+        bucket = client.bucket(request.bucket_name)
+
+        if not bucket.exists():
+            return JSONResponse(
+                {"status": "error", "message": f"Bucket '{request.bucket_name}' does not exist"},
+                status_code=404,
             )
-        except asyncio.TimeoutError:
-            response = f"Timed out uploading {deploy_file.filename}."
 
-        # Cold-start retry with fresh session
-        if not response:
-            retry_id = str(uuid.uuid4())
-            await _ensure_session(retry_id, user_id)
-            await asyncio.sleep(1)
-            try:
-                response = await asyncio.wait_for(
-                    _run_agent_async(retry_id, user_id, message),
-                    timeout=120.0,
-                )
-                if response:
-                    session_id = retry_id
-            except asyncio.TimeoutError:
-                response = f"Timed out uploading {deploy_file.filename} (retry)."
+        uploaded = []
+        for deploy_file in request.files:
+            content_bytes = deploy_file.content.encode("utf-8")
+            content_type = (
+                "text/html" if deploy_file.filename.endswith(".html") else
+                "text/css"  if deploy_file.filename.endswith(".css")  else
+                "application/javascript" if deploy_file.filename.endswith(".js") else
+                "text/plain"
+            )
+            blob = bucket.blob(deploy_file.filename)
+            blob.upload_from_file(io.BytesIO(content_bytes), content_type=content_type)
+            logger.info(f"Deployed '{deploy_file.filename}' ({len(content_bytes)} bytes) → gs://{request.bucket_name}/{deploy_file.filename}")
+            uploaded.append(deploy_file.filename)
 
-        responses.append(response or f"No response for {deploy_file.filename}.")
+        public_url = f"https://storage.googleapis.com/{request.bucket_name}/index.html"
+        summary = (
+            f"Successfully deployed {len(uploaded)} file(s) to bucket '{request.bucket_name}':\n"
+            + "\n".join(f"  • {f}" for f in uploaded)
+            + f"\n\nPublic URL: {public_url}"
+        )
+        return JSONResponse({"response": summary, "status": "success"})
 
-    return JSONResponse({
-        "response": "\n\n---\n\n".join(responses),
-        "session_id": session_id,
-        "status": "success",
-    })
+    except Exception as e:
+        logger.exception("Deploy error")
+        return JSONResponse({"status": "error", "message": str(e)}, status_code=500)
 
 
 # ---------------------------------------------------------------------------
