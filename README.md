@@ -1,6 +1,6 @@
 # GCP Storage Pilot — AI-Powered Cloud Storage Agent
 
-Manage Google Cloud Storage through natural language. Built with **Google ADK**, **Gemini 2.5 Flash**, **FastAPI**, and **NestJS**.
+Manage Google Cloud Storage through natural language. Built with **Google ADK**, **Gemini 3.1 Pro**, **FastAPI**, and **NestJS**. Uses an **orchestrator + 17 specialized sub-agents** architecture for reliable tool routing.
 
 ## Architecture
 
@@ -11,10 +11,34 @@ NestJS BFF (storage-ui/, port 3000)
   ↕ HTTP
 FastAPI Backend (bucket_storage_agent/, port 8080)
   ↕ ADK Runner
-Gemini 2.5 Flash + 81 GCS Tools
+Orchestrator Agent (routes requests, no tools)
+  ↕ transfer_to_agent
+17 Specialized Sub-Agents (3-6 tools each, 82 total)
   ↕
 Google Cloud Storage API
 ```
+
+### Sub-Agent Directory
+
+| Sub-Agent | Tools | Domain |
+|-----------|-------|--------|
+| bucket_crud | 5 | Create, delete, list, inspect, update buckets |
+| bucket_config | 5 | Versioning, usage stats, labels |
+| object_management | 5 | Upload, download, delete, rename, list objects |
+| object_utilities | 5 | Copy, metadata, signed URLs, resumable upload |
+| iam_permissions | 5 | IAM members, permissions, public access |
+| security_policy | 5 | IAM policies, bucket policies, UBLA |
+| acl_audit | 4 | Object ACLs, access audit, policy lock |
+| website_hosting | 5 | Static hosting config, pages, asset upload |
+| web_content | 4 | HTML deploy, CORS, cache, Cloud Functions |
+| monitoring_logging | 5 | Metrics, cost, access logs, request logging |
+| analytics | 4 | Activity analysis, recommendations, BigQuery |
+| lifecycle_automation | 5 | Lifecycle rules, cleanup, archival, inventory |
+| compliance_encryption | 6 | Retention policies, CMEK encryption |
+| object_holds | 5 | Temporary and event-based holds |
+| notifications | 3 | Pub/Sub notification CRUD |
+| recovery | 5 | Soft delete, object/version restoration |
+| data_transfer | 6 | Batch ops, sync, backup, migrate |
 
 ## Setup
 
@@ -109,8 +133,8 @@ For Cursor/Windsurf, add to MCP settings:
 
 | Layer | Technology |
 |-------|-----------|
-| Agent Framework | Google ADK |
-| LLM | Gemini 2.5 Flash |
+| Agent Framework | Google ADK (orchestrator + 17 sub-agents) |
+| LLM | Gemini 3.1 Pro Preview |
 | Backend | FastAPI + Uvicorn |
 | Frontend | NestJS 10 + TypeScript + Socket.IO |
 | GCP SDKs | google-cloud-storage, monitoring, bigquery |
